@@ -124,18 +124,22 @@ def detect(save_img=False):
             # distancing(people_coords,car_coords,im0,dist_thres_lim=(150,250))
                         ################################################
 
-                        # if (label.split())[0] == 'car' or (label.split())[0] == 'truck' or (label.split())[0] == 'bus':
-                        #     im0 = plot_one_box_Car(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
-                        # elif(label.split())[0] == 'person' or (label.split())[0] == 'motorcycle' or (label.split())[0] == 'bicycle':
-                        #     im0 = plot_one_box_Person(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
+                        #中文标签测距
+                        if (label.split())[0] == '轿车' or (label.split())[0] == '卡车' or (label.split())[0] == '公交车':
+                            im0 = plot_one_box_Car(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
+                        elif(label.split())[0] == '人' or (label.split())[0] == '摩托车' or (label.split())[0] == '自行车':
+                            im0 = plot_one_box_Person(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
 
+                        #原来英文标签
                         # if (label.split())[0] == 'car' or (label.split())[0] == 'truck' or (label.split())[0] == 'bus' or (label.split())[0] == 'motorcycle' or (label.split())[0] == 'bicycle' or (label.split())[0] == 'person':
                         #     im0 = plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
-                        #实现中文标签
-                        if (label.split())[0] == '轿车' or (label.split())[0] == '卡车' or (label.split())[
-                            0] == '公交车' or (label.split())[0] == '摩托车' or (label.split())[0] == '自行车' or \
-                                (label.split())[0] == '人':
-                            im0 = plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
+
+                        #
+                        # #实现中文标签
+                        # if (label.split())[0] == '轿车' or (label.split())[0] == '卡车' or (label.split())[
+                        #     0] == '公交车' or (label.split())[0] == '摩托车' or (label.split())[0] == '自行车' or \
+                        #         (label.split())[0] == '人':
+                        #     im0 = plot_one_box(xyxy, im0, label=label, color=colors[int(cls)], line_thickness=3)
 
 
             # Print time (inference + NMS)
@@ -175,7 +179,7 @@ def detect(save_img=False):
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()    #Creating parsed objects
     parser.add_argument('--weights', nargs='+', type=str, default='best.pt', help='model.pt path(s)')
-    parser.add_argument('--source', type=str, default='data/images', help='source')  # file/folder, 0 for webcam
+    parser.add_argument('--source', type=str, default='data/video/中关村夜间.mp4', help='source')  # file/folder, 0 for webcam
     parser.add_argument('--img-size', type=int, default=640, help='inference size (pixels)')
     parser.add_argument('--conf-thres', type=float, default=0.5, help='object confidence threshold')
     parser.add_argument('--iou-thres', type=float, default=0.45, help='IOU threshold for NMS')

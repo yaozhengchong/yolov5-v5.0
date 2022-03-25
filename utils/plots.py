@@ -82,22 +82,36 @@ def plot_one_box_Car(x, img, color=None, label=None, line_thickness=3):
     color = color or [random.randint(0, 255) for _ in range(3)]
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
     label_C = ''
-    if((label.split())[0] == 'car'):
+    if((label.split())[0] == '轿车'):
         W = (4/1920)*(int(x[2])-int(x[0]))         #*(5.3/1080)*(abs(int(x[1]-int(x[3]))))
-        L1 = int((250*0.75 ) / W) / 100.0
-        label_C = '车' + ' ' + str(L1) + 'm'
-    elif ((label.split())[0] == 'truck' or (label.split())[0] == 'bus'):
+        L1 = int((250*0.75) / W) / 100.0
+        label_C = str((label.split())[0]) + ' ' + str(L1) + 'm'
+    elif ((label.split())[0] == '卡车' or (label.split())[0] == '公交车'):
         W = (4/1920)*(int(x[2])-int(x[0]))        #*(5.3/1080)*(abs(int(x[1]-int(x[3]))))
         L1 = int((375*0.75) / W) / 100.0
         label_C = str((label.split())[0]) + ' ' + str(L1) + 'm'
     if label_C:
-        color = color or [random.randint(0, 255) for _  in range(3)]
-        cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
+        # color = color or [random.randint(0, 255) for _  in range(3)]
+        # cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
+        # tf = max(tl - 1, 1)  # font thickness
+        # t_size = cv2.getTextSize(label_C, 0, fontScale=tl / 3, thickness=tf)[0]
+        # c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        # cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+        # cv2.putText(img, label_C, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+
+        #更改中文标签
         tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label_C, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        font_size = t_size[1]
+        font = ImageFont.truetype('SimHei.ttf', font_size)
+        t_size = font.getsize(label_C)
+        c2 = c1[0] + t_size[0], c1[1] - t_size[1]
         cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
-        cv2.putText(img, label_C, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+        img_PIL = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_PIL)
+        draw.text((c1[0], c2[1] - 2), label_C, fill=(255, 255, 255), font=font)
+
+        return cv2.cvtColor(np.array(img_PIL), cv2.COLOR_RGB2BGR)
 
 
 
@@ -110,21 +124,35 @@ def plot_one_box_Person(x, img, color=None, label=None, line_thickness=3):
     color = color or [random.randint(0, 255) for _ in range(3)]
     cv2.rectangle(img, c1, c2, color, thickness=tl, lineType=cv2.LINE_AA)
     label_P = ''
-    if((label.split())[0] == 'person'):
+    if((label.split())[0] == '人'):
         W = (4/1920)*(int(x[2])-int(x[0])) #*(5/1080)*(abs(int(x[1]-int(x[3]))))
         L1 = int((70*0.9)/W)/100.0
         label_P = str((label.split())[0]) + ' ' + str(L1) + 'm'
-    if((label.split())[0] == 'motorcycle' or (label.split())[0] == 'bicycle'):
+    if((label.split())[0] == '摩托车' or (label.split())[0] == '自行车'):
         W = (4/1920)*(int(x[2])-int(x[0])) #*(5/1080)*(abs(int(x[1]-int(x[3]))))
         L1 = int((70*0.9)/W)/100.0
         label_P = str((label.split())[0]) + ' ' + str(L1) + 'm'
 
     if label_P:
+        # tf = max(tl - 1, 1)  # font thickness
+        # t_size = cv2.getTextSize(label_P, 0, fontScale=tl / 3, thickness=tf)[0]
+        # c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        # cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
+        # cv2.putText(img, label_P, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+
+        #更改为中文标签
         tf = max(tl - 1, 1)  # font thickness
         t_size = cv2.getTextSize(label_P, 0, fontScale=tl / 3, thickness=tf)[0]
-        c2 = c1[0] + t_size[0], c1[1] - t_size[1] - 3
+        font_size = t_size[1]
+        font = ImageFont.truetype('SimHei.ttf', font_size)
+        t_size = font.getsize(label_P)
+        c2 = c1[0] + t_size[0], c1[1] - t_size[1]
         cv2.rectangle(img, c1, c2, color, -1, cv2.LINE_AA)  # filled
-        cv2.putText(img, label_P, (c1[0], c1[1] - 2), 0, tl / 3, [225, 255, 255], thickness=tf, lineType=cv2.LINE_AA)
+        img_PIL = Image.fromarray(cv2.cvtColor(img, cv2.COLOR_BGR2RGB))
+        draw = ImageDraw.Draw(img_PIL)
+        draw.text((c1[0], c2[1] - 2), label_P, fill=(255, 255, 255), font=font)
+
+        return cv2.cvtColor(np.array(img_PIL), cv2.COLOR_RGB2BGR)
 
 
 
